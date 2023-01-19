@@ -1,0 +1,285 @@
+.page-container {
+  flex-direction: column;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 90vh;
+  text-align: center;
+}
+
+.page-container .container {
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-container .container .scroll-wrapper {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  overflow: hidden;
+  transition: 0.4s ease-in;
+}
+
+.page-container .container .scroll-wrapper .clock-wrapper {
+  width: 100vw;
+}
+
+.page-container .button-container {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.clock-container {
+  position: relative;
+  margin: 0 auto;
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  border: 5px solid #000000;
+  display: grid;
+  place-content: center;
+  box-shadow: inset 0px 0px 15px 0px #373434;
+  background: #000000;
+  transform: scale(1.5);
+}
+
+.clock-container::before{
+  content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-radius: 50%;
+    box-shadow: 0px 0px 7px -1px rgb(174 174 174);
+    z-index: -99;
+}
+
+.clock-container .center {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #000000;
+  border: 1px solid rgb(212, 134, 134);
+  z-index: 999;
+}
+
+.clock-container .number {
+  position: absolute;
+  font-size: 40px;
+  color: #d5d5d5;
+  font-family: "Alfa Slab One", cursive;
+  transition: 0.5s ease;
+}
+
+.clock-container .number.twelve {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-container .number.one {
+  font-size: 20px;
+  top: 16.67%;
+  left: 83.33%;
+  transform: translate(-66.67%, -16.67%);
+}
+.clock-container .number.three {
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.clock-container .number.six {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.clock-container .number.nine {
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.clock-container .hand {
+  border-left: 2px solid rgb(212, 134, 134);
+  width: 0;
+  position: absolute;
+  transform-origin: bottom;
+  bottom: 50%;
+  box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0.5px 0 2px 0 #2f2a2a;
+}
+
+.clock-container .seconds-hand {
+  height: 95px;
+  border-left: 1px solid rgb(255, 0, 0);
+  z-index: 99;
+  left: 99.5px;
+}
+
+.clock-container .minute-hand {
+  height: 80px;
+  z-index: 9;
+  border-width: 2px;
+  left: 99px;
+}
+
+.clock-container .hour-hand {
+  height: 50px;
+  z-index: 0;
+  border-width: 3px;
+  left: 98.5px;
+}
+
+.clock-container .day-cont {
+  height: 20px;
+  width: 40px;
+  bottom: 27%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  z-index: -9;
+}
+
+.clock-container .day-cont div {
+  font-family: "Oswald", sans-serif;
+  display: grid;
+  place-items: center;
+  background: #cacaca;
+  width: 47%;
+  box-shadow: inset 0 0.4px 1px 0.5px #292929;
+}
+
+.clock-wrapper .clock-container .weather-cont {
+  font-family: "Oswald", sans-serif;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  flex-direction: column;
+  z-index: -9;
+  color: #cacaca;
+}
+
+.clock-wrapper.analog .clock-container .weather-cont {
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clock-wrapper.digital .clock-container .weather-cont {
+  top: 25%;
+  left: 70%;
+  transform: translateX(-50%);
+}
+
+.button-container .change-theme {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0px 1px 2px 0 #000;
+  transition: 0.5s ease;
+}
+
+.button-container .change-theme:hover {
+  box-shadow: 0px 3px 6px 0px #000;
+  transform: scale(1.005);
+}
+
+.btn-cont {
+  display: flex;
+  justify-content: center;
+}
+.btn-cont .toggle-container {
+  height: 30px;
+  width: 50px;
+  background-color: rgb(226, 225, 217);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  position: relative;
+  box-shadow: inset 0px 0px 2px 0.4px #161616;
+}
+
+.btn-cont input {
+  display: none;
+}
+
+.btn-cont .toggle-container .tgbt {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  position: absolute;
+  transition: 0.4s ease;
+  left: 3px;
+  cursor: pointer;
+  box-shadow: 0px 0px 1px 0.4px #161616;
+}
+
+.btn-cont input:checked + .toggle-container .tgbt {
+  left: calc(100% - 32px);
+}
+
+.clock-wrapper.digital .clock-container {
+  position: relative;
+}
+
+.clock-wrapper.digital .clock-container .number {
+  /* font-family: 'Alfa Slab One', cursive; */
+  font-family: "Anton", sans-serif;
+  position: absolute;
+  font-size: 90px;
+  text-shadow: 0px 0px 3px black;
+  height: 100px;
+  width: 100px;
+}
+
+.clock-wrapper.digital .clock-container .number.hour {
+  left: 10%;
+  top: 0;
+}
+
+.clock-wrapper.digital .clock-container .number.minute {
+  left: 35%;
+  top: 33%;
+}
+
+.clock-wrapper.digital .clock-container .day-cont {
+  height: 20px;
+  width: 40px;
+  bottom: 27%;
+  left: 27%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 15px;
+  z-index: -9;
+  padding: 5px;
+}
+
+.clock-wrapper.digital .clock-container .day-cont div {
+  font-family: "Oswald", sans-serif;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  width: 47%;
+  color: #cacaca;
+  box-shadow: none;
+}
+
+.clock-wrapper.digital .clock-container .day-cont div.day {
+  margin-left: 12px;
+}
