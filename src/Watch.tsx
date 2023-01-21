@@ -1,25 +1,40 @@
-import React from "react";
+import React from 'react';
 import './watch.css';
-import { Weather, theme, days, weatherCodeMap } from "./watch-utility";
-
+import {
+    Weather,
+    theme,
+    days,
+    weatherCodeMap,
+    RotationDegrees,
+    HandTransition,
+    Now,
+} from './watch-utility';
 
 export function Watch() {
-    const [secRotateDeg, setSecRotateDeg] = React.useState(0);
-    const [minRotateDeg, setMinRotateDeg] = React.useState(0);
-    const [hourRotateDeg, setHourRotateDeg] = React.useState(0);
-    const [secHandTransition, setSecHandTransition] = React.useState('none');
-    const [minHandTransition, setMinHandTransition] = React.useState('none');
-    const [hourHandTransition, setHourHandTransition] = React.useState('none');
-    const [day, setDay] = React.useState(0);
-    const [date, setDate] = React.useState(0);
-    const [hour, setHour] = React.useState(0);
-    const [min, setMin] = React.useState(0);
+    const [rotationDegrees, setRotationDegrees] = React.useState<RotationDegrees>({
+        secRotateDeg: 0,
+        minRotateDeg: 0,
+        hourRotateDeg: 0,
+    });
+    const [handTransition, setHandTransition] = React.useState<HandTransition>({
+        secHand: 'none',
+        minHand: 'none',
+        hourHand: 'none',
+    });
+    const [now, setNow] = React.useState<Now>({
+        day: 0,
+        date: 0,
+        hour: 0,
+        min: 0,
+        sec: 0,
+    });
+
     const [themeIdx, setThemeIdx] = React.useState(0);
     const [mode, setMode] = React.useState<'ANALOG' | 'DIGITAL'>('ANALOG');
     const [weather, setWeather] = React.useState<Weather>();
 
     React.useEffect(() => {
-        let interval = setInterval(() => {
+        const interval = setInterval(() => {
             const dt = new Date();
             let [sec, min, hour, date, day] = [
                 dt.getSeconds(),
@@ -29,36 +44,45 @@ export function Watch() {
                 dt.getDay(),
             ];
             hour = hour % 12 || 12;
-            setHour(hour);
-            setMin(min);
-            setSecRotateDeg(sec * (360 / 60));
-            setMinRotateDeg(min * (360 / 60));
-            setHourRotateDeg(hour * 30 + min * 0.5);
-            setDay(day);
-            setDate(date);
+            setRotationDegrees({
+                secRotateDeg: sec * (360 / 60),
+                minRotateDeg: min * (360 / 60),
+                hourRotateDeg: hour * 30 + min * 0.5,
+            });
+            setNow({
+                day: day,
+                date: date,
+                sec: sec,
+                min: min,
+                hour: hour,
+            });
         }, 1000);
-
         return () => {
             clearInterval(interval);
         };
     }, []);
 
     React.useEffect(() => {
-        secRotateDeg < 6
-            ? setSecHandTransition('all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s')
-            : setSecHandTransition('all 0.2s cubic-bezier(0, 0, 0.99, 1.02) 0s');
-        minRotateDeg < 6
-            ? setMinHandTransition('all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s')
-            : setMinHandTransition('all 0.2s cubic-bezier(0, 0, 0.99, 1.02) 0s');
-        hourRotateDeg < 6
-            ? setHourHandTransition('all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s')
-            : setHourHandTransition('all 0.2s cubic-bezier(0, 0, 0.99, 1.02) 0s');
-    }, [secRotateDeg, minRotateDeg, hourRotateDeg]);
+        setHandTransition({
+            secHand:
+                rotationDegrees.secRotateDeg < 6
+                    ? 'all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s'
+                    : 'all 1s cubic-bezier(0, 0, 0.99, 1.02) 0s',
+            minHand:
+                rotationDegrees.minRotateDeg < 6
+                    ? 'all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s'
+                    : 'all 0.2s cubic-bezier(0, 0, 0.99, 1.02) 0s',
+            hourHand:
+                rotationDegrees.hourRotateDeg < 6
+                    ? 'all 0s cubic-bezier(0, 0, 0.99, 1.02) 0s'
+                    : 'all 0.2s cubic-bezier(0, 0, 0.99, 1.02) 0s',
+        });
+    }, [rotationDegrees]);
 
     React.useEffect(() => {
         const fetchWeatherData = (coords: GeolocationCoordinates) => {
             fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current_weather=true`,
+                `https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current_weather=true`
             )
                 .then((res) => {
                     return res.json();
@@ -68,7 +92,7 @@ export function Watch() {
                         setWeather({
                             available: true,
                             temperature: result?.current_weather?.temperature,
-                            weatherCode: result?.current_weather?.weathercode
+                            weatherCode: result?.current_weather?.weathercode,
                         });
                     },
                     (error) => {
@@ -79,10 +103,8 @@ export function Watch() {
 
         const initializeWeather = () => {
             if ('geolocation' in navigator) {
-                console.log('Available');
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        console.log(position?.coords);
                         if (position?.coords) fetchWeatherData(position.coords);
                     },
                     (error) => {
@@ -90,12 +112,11 @@ export function Watch() {
                     }
                 );
             } else {
-                console.log('Not Available');
+                console.log('Geo Location Not Available');
             }
         };
-
         initializeWeather();
-    }, [min]);
+    }, [now.min]);
 
     const updateTheme = () => {
         // setThemeIdx(Math.floor(Math.random() * 10));
@@ -111,21 +132,95 @@ export function Watch() {
     const getWeather = () => {
         return weather?.available ? (
             <div className="weather-cont">
-                <div className="temp">{Math.round(weather?.temperature || 0)}&#176;C</div>
-                <div className="weather-code">{weatherCodeMap.find(f => f.key === weather?.weatherCode)?.val}</div>
+                <div className="temp">
+                    {Math.round(weather?.temperature || 0)}&#176;C
+                </div>
+                <div className="weather-code">
+                    {weatherCodeMap.find((f) => f.key === weather?.weatherCode)?.val}
+                </div>
             </div>
         ) : null;
-    }
+    };
 
     const getDate = () => {
-        const _day = mode === 'ANALOG' ? days[day].slice(0, 2) : days[day];
+        const _day = mode === 'ANALOG' ? days[now.day].slice(0, 2) : days[now.day];
         return (
             <div className="day-cont">
-                <div className="date">{date}</div>
+                <div className="date">{now.date}</div>
                 <div className="day">{_day}</div>
             </div>
-        )
-    }
+        );
+    };
+
+    const getAnalogWatch = () => {
+        return (
+            <div className="clock-wrapper analog">
+                <div className="clock-container">
+                    <span className=" number twelve" style={{ color: theme[themeIdx] }}>
+                        12
+                    </span>
+                    <span className="number three" style={{ color: theme[themeIdx] }}>
+                        3
+                    </span>
+                    <span className="number six" style={{ color: theme[themeIdx] }}>
+                        6
+                    </span>
+                    <span className="number nine" style={{ color: theme[themeIdx] }}>
+                        9
+                    </span>
+                    <div className="center"></div>
+                    <div
+                        className="seconds-hand hand"
+                        style={{
+                            transform: `rotate(${rotationDegrees.secRotateDeg}deg)`,
+                            transition: handTransition.secHand,
+                        }}
+                    ></div>
+                    <div
+                        className="minute-hand hand"
+                        style={{
+                            transform: `rotate(${rotationDegrees.minRotateDeg}deg)`,
+                            transition: handTransition.minHand,
+                        }}
+                    ></div>
+                    <div
+                        className="hour-hand hand"
+                        style={{
+                            transform: `rotate(${rotationDegrees.hourRotateDeg}deg)`,
+                            transition: handTransition.hourHand,
+                        }}
+                    ></div>
+                    {getWeather()}
+                    {getDate()}
+                </div>
+            </div>
+        );
+    };
+
+    const getDigitalWatch = () => {
+        return (
+            <div className="clock-wrapper digital">
+                <div className="clock-container">
+                    <div className="hour number" style={{ color: theme[themeIdx] }}>
+                        <span>{now.hour}</span>
+                    </div>
+                    <div
+                        className="minute number"
+                        style={{
+                            color:
+                                themeIdx === theme.length - 1
+                                    ? theme[themeIdx]
+                                    : theme[themeIdx + 1],
+                        }}
+                    >
+                        <span>{now.min}</span>
+                    </div>
+                    {getWeather()}
+                    {getDate()}
+                </div>
+            </div>
+        );
+    };
 
     return (
         <React.Fragment>
@@ -135,75 +230,8 @@ export function Watch() {
                         className="scroll-wrapper"
                         style={{ left: mode === 'ANALOG' ? 0 : '-100vw' }}
                     >
-                        <div className="clock-wrapper analog">
-                            <div className="clock-container">
-                                <span
-                                    className=" number twelve"
-                                    style={{ color: theme[themeIdx] }}
-                                >
-                                    12
-                                </span>
-                                <span
-                                    className="number three"
-                                    style={{ color: theme[themeIdx] }}
-                                >
-                                    3
-                                </span>
-                                <span className="number six" style={{ color: theme[themeIdx] }}>
-                                    6
-                                </span>
-                                <span
-                                    className="number nine"
-                                    style={{ color: theme[themeIdx] }}
-                                >
-                                    9
-                                </span>
-                                <div className="center"></div>
-                                <div
-                                    className="seconds-hand hand"
-                                    style={{
-                                        transform: `rotate(${secRotateDeg}deg)`,
-                                        transition: secHandTransition,
-                                    }}
-                                ></div>
-                                <div
-                                    className="minute-hand hand"
-                                    style={{
-                                        transform: `rotate(${minRotateDeg}deg)`,
-                                        transition: minHandTransition,
-                                    }}
-                                ></div>
-                                <div
-                                    className="hour-hand hand"
-                                    style={{
-                                        transform: `rotate(${hourRotateDeg}deg)`,
-                                        transition: hourHandTransition,
-                                    }}
-                                ></div>
-                                {getWeather()}
-                                {getDate()}
-                            </div>
-                        </div>
-                        <div className="clock-wrapper digital">
-                            <div className="clock-container">
-                                <div className="hour number" style={{ color: theme[themeIdx] }}>
-                                    <span>{hour}</span>
-                                </div>
-                                <div
-                                    className="minute number"
-                                    style={{
-                                        color:
-                                            themeIdx === theme.length - 1
-                                                ? theme[themeIdx]
-                                                : theme[themeIdx + 1],
-                                    }}
-                                >
-                                    <span>{min}</span>
-                                </div>
-                                {getWeather()}
-                                {getDate()}
-                            </div>
-                        </div>
+                        {getAnalogWatch()}
+                        {getDigitalWatch()}
                     </div>
                 </div>
                 <div className="button-container">

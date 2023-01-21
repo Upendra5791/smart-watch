@@ -51,16 +51,16 @@
   transform: scale(1.5);
 }
 
-.clock-container::before{
+.clock-container::before {
   content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    border-radius: 50%;
-    box-shadow: 0px 0px 7px -1px rgb(174 174 174);
-    z-index: -99;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-radius: 50%;
+  box-shadow: 0px 0px 7px -1px rgb(174 174 174);
+  z-index: -99;
 }
 
 .clock-container .center {
@@ -76,7 +76,7 @@
   position: absolute;
   font-size: 40px;
   color: #d5d5d5;
-  font-family: "Alfa Slab One", cursive;
+  font-family: 'Alfa Slab One', cursive;
   transition: 0.5s ease;
 }
 
@@ -150,7 +150,7 @@
 }
 
 .clock-container .day-cont div {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   display: grid;
   place-items: center;
   background: #cacaca;
@@ -159,7 +159,7 @@
 }
 
 .clock-wrapper .clock-container .weather-cont {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -238,7 +238,7 @@
 
 .clock-wrapper.digital .clock-container .number {
   /* font-family: 'Alfa Slab One', cursive; */
-  font-family: "Anton", sans-serif;
+  font-family: 'Anton', sans-serif;
   position: absolute;
   font-size: 90px;
   text-shadow: 0px 0px 3px black;
@@ -271,7 +271,7 @@
 }
 
 .clock-wrapper.digital .clock-container .day-cont div {
-  font-family: "Oswald", sans-serif;
+  font-family: 'Oswald', sans-serif;
   display: grid;
   place-items: center;
   background: transparent;
