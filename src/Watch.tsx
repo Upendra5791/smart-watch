@@ -1,4 +1,3 @@
-import React from 'react';
 import './watch.css';
 import {
     Weather,
@@ -9,13 +8,16 @@ import {
     HandTransition,
     Now,
 } from './watch-utility';
+import React from 'react';
 
 export function Watch() {
-    const [rotationDegrees, setRotationDegrees] = React.useState<RotationDegrees>({
-        secRotateDeg: 0,
-        minRotateDeg: 0,
-        hourRotateDeg: 0,
-    });
+    const [rotationDegrees, setRotationDegrees] = React.useState<RotationDegrees>(
+        {
+            secRotateDeg: 0,
+            minRotateDeg: 0,
+            hourRotateDeg: 0,
+        }
+    );
     const [handTransition, setHandTransition] = React.useState<HandTransition>({
         secHand: 'none',
         minHand: 'none',
@@ -32,11 +34,8 @@ export function Watch() {
     const [themeIdx, setThemeIdx] = React.useState(0);
     const [mode, setMode] = React.useState<'ANALOG' | 'DIGITAL'>('ANALOG');
     const [weather, setWeather] = React.useState<Weather>();
-    const [defaultTouch, setDefaultTouch] = React.useState({
-        x: 0,
-        y: 0,
-        time: 0,
-    });
+    const [x, setX] = React.useState<number>(0);
+    const [scrollVal, setScrollVal] = React.useState<number>(0);
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -124,6 +123,10 @@ export function Watch() {
     }, [now.min]);
 
     React.useEffect(() => {
+        setScrollVal(mode === 'ANALOG' ? 0 : -100);
+    }, [mode]);
+
+    React.useEffect(() => {
         window.addEventListener('touchstart', handleTouchEvent);
         window.addEventListener('touchmove', handleTouchEvent);
         window.addEventListener('touchend', handleTouchEvent);
@@ -137,41 +140,34 @@ export function Watch() {
         };
     });
 
-    const handleTouchEvent = (e: TouchEvent) => {
-        const swipeDirection = getSwipeDirection(e);
-        if (!!swipeDirection) {
-            if (swipeDirection === 'LEFT' && mode === 'ANALOG') {
-                setMode('DIGITAL');
-            } else if (swipeDirection === 'RIGHT' && mode === 'DIGITAL') {
-                setMode('ANALOG');
-            }
-        }
-    };
-
-    const getSwipeDirection = (event: TouchEvent) => {
+    const handleTouchEvent = (event: TouchEvent) => {
         let touch = event.touches[0] || event.changedTouches[0];
         // check the events
         if (event.type === 'touchstart') {
-            let defaultTouch_temp = { x: 0, y: 0, time: 0 };
-            defaultTouch_temp.x = touch.pageX;
-            defaultTouch_temp.y = touch.pageY;
-            defaultTouch_temp.time = event.timeStamp;
-            setDefaultTouch(defaultTouch_temp);
+            setX(touch.pageX);
         } else if (event.type === 'touchmove') {
-        } else if (event.type === 'touchend') {
-            let deltaX = touch.pageX - defaultTouch.x;
-            let deltaY = touch.pageY - defaultTouch.y;
-            let deltaTime = event.timeStamp - defaultTouch.time;
-
-            if (deltaTime < 500) {
-                if (Math.abs(deltaX) > 100) {
-                    if (deltaX > 0) {
-                        return 'RIGHT';
-                    } else {
-                        return 'LEFT';
-                    }
+            let deltaX = touch.pageX - x;
+            if (Math.abs(deltaX) > 15) {
+                setX(touch.pageX);
+                if (deltaX <= 0) {
+                    setScrollVal((prevVal) => {
+                        return prevVal > -100 ? prevVal + deltaX * 0.65 : prevVal;
+                    });
+                } else if (deltaX > 0) {
+                    setScrollVal((prevVal) => {
+                        return prevVal < 0 ? prevVal + deltaX * 0.65 : prevVal;
+                    });
                 }
             }
+        } else if (event.type === 'touchend') {
+            setX(0);
+            if (scrollVal < -50) setScrollVal(-100);
+            else if (scrollVal >= -50) setScrollVal(0);
+            setMode((prevVal) => {
+                if (scrollVal < -50) return 'DIGITAL';
+                else if (scrollVal >= -50) return 'ANALOG';
+                else return prevVal;
+            });
         }
         return null;
     };
@@ -183,9 +179,9 @@ export function Watch() {
         );
     };
 
-    const toggleMode = () => {
-        setMode((prevMode) => (prevMode === 'ANALOG' ? 'DIGITAL' : 'ANALOG'));
-    };
+    /*   const toggleMode = () => {
+      setMode((prevMode) => (prevMode === 'ANALOG' ? 'DIGITAL' : 'ANALOG'));
+    }; */
 
     const getWeather = () => {
         return weather?.available ? (
@@ -296,7 +292,7 @@ export function Watch() {
                 <div className="container">
                     <div
                         className="scroll-wrapper"
-                        style={{ left: mode === 'ANALOG' ? 0 : '-100vw' }}
+                        style={{ left: `${scrollVal}vw` }}
                     >
                         {getAnalogWatch()}
                         {getDigitalWatch()}
@@ -307,7 +303,7 @@ export function Watch() {
                         {getDot('ANALOG')}
                         {getDot('DIGITAL')}
                     </div>
-                   {/*  <div className="btn-cont">
+                    {/*  <div className="btn-cont">
                         <input
                             type="checkbox"
                             value="show digital"
