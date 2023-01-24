@@ -32,6 +32,11 @@ export function Watch() {
     const [themeIdx, setThemeIdx] = React.useState(0);
     const [mode, setMode] = React.useState<'ANALOG' | 'DIGITAL'>('ANALOG');
     const [weather, setWeather] = React.useState<Weather>();
+    const [defaultTouch, setDefaultTouch] = React.useState({
+        x: 0,
+        y: 0,
+        time: 0,
+    });
 
     React.useEffect(() => {
         const interval = setInterval(() => {
@@ -117,6 +122,59 @@ export function Watch() {
         };
         initializeWeather();
     }, [now.min]);
+
+    React.useEffect(() => {
+        window.addEventListener('touchstart', handleTouchEvent);
+        window.addEventListener('touchmove', handleTouchEvent);
+        window.addEventListener('touchend', handleTouchEvent);
+        window.addEventListener('touchcancel', handleTouchEvent);
+
+        return () => {
+            window.removeEventListener('touchstart', handleTouchEvent);
+            window.removeEventListener('touchmove', handleTouchEvent);
+            window.removeEventListener('touchend', handleTouchEvent);
+            window.removeEventListener('touchcancel', handleTouchEvent);
+        };
+    });
+
+    const handleTouchEvent = (e: TouchEvent) => {
+        const swipeDirection = getSwipeDirection(e);
+        if (!!swipeDirection) {
+            if (swipeDirection === 'LEFT' && mode === 'ANALOG') {
+                setMode('DIGITAL');
+            } else if (swipeDirection === 'RIGHT' && mode === 'DIGITAL') {
+                setMode('ANALOG');
+            }
+        }
+    };
+
+    const getSwipeDirection = (event: TouchEvent) => {
+        let touch = event.touches[0] || event.changedTouches[0];
+        // check the events
+        if (event.type === 'touchstart') {
+            let defaultTouch_temp = { x: 0, y: 0, time: 0 };
+            defaultTouch_temp.x = touch.pageX;
+            defaultTouch_temp.y = touch.pageY;
+            defaultTouch_temp.time = event.timeStamp;
+            setDefaultTouch(defaultTouch_temp);
+        } else if (event.type === 'touchmove') {
+        } else if (event.type === 'touchend') {
+            let deltaX = touch.pageX - defaultTouch.x;
+            let deltaY = touch.pageY - defaultTouch.y;
+            let deltaTime = event.timeStamp - defaultTouch.time;
+
+            if (deltaTime < 500) {
+                if (Math.abs(deltaX) > 100) {
+                    if (deltaX > 0) {
+                        return 'RIGHT';
+                    } else {
+                        return 'LEFT';
+                    }
+                }
+            }
+        }
+        return null;
+    };
 
     const updateTheme = () => {
         // setThemeIdx(Math.floor(Math.random() * 10));
@@ -222,6 +280,16 @@ export function Watch() {
         );
     };
 
+    const getDot = (in_mode: 'ANALOG' | 'DIGITAL') => {
+        return (
+            <span className='dot'
+                style={{
+                    backgroundColor: in_mode === mode ? 'rgb(202, 202, 202)' : 'transparent'
+                }}
+                onClick={() => setMode(in_mode)}></span>
+        )
+    }
+
     return (
         <React.Fragment>
             <div className="page-container">
@@ -235,7 +303,11 @@ export function Watch() {
                     </div>
                 </div>
                 <div className="button-container">
-                    <div className="btn-cont">
+                    <div className='btn-cont'>
+                        {getDot('ANALOG')}
+                        {getDot('DIGITAL')}
+                    </div>
+                   {/*  <div className="btn-cont">
                         <input
                             type="checkbox"
                             value="show digital"
@@ -254,7 +326,7 @@ export function Watch() {
                                 }}
                             ></div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="btn-cont">
                         <button
