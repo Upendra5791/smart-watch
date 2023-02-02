@@ -1,0 +1,38 @@
+.calendar .title {
+  font-size: 15px;
+  font-family: "Oswald", sans-serif;
+  transition: 0.5s ease;
+}
+
+.calendar .calendar-layout {
+  width: 80%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 45px;
+}
+
+.calendar .calendar-layout .header,
+.calendar .calendar-layout .body {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.calendar .calendar-layout .cell {
+  font-family: "Oswald", sans-serif;
+  width: 14%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8px;
+  padding: 4px 0;
+}
+
+.calendar .calendar-layout .cell.today span {
+  border-radius: 50%;
+  min-width: 55%;
+  padding: 2px;
+  color: black;
+  transition: 0.5s ease;
+}

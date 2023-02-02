@@ -1,0 +1,84 @@
+  .hourly-weather .hourly-temp {
+    height: 80px;
+    width: 85%;
+    background-color: #ffffff2e;
+    border-radius: 20px;
+    font-size: 10px;
+    position: relative;
+  }
+  
+  .hourly-weather .hourly-temp .x-scroll {
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .hourly-temp .x-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .hourly-weather .hourly-temp .hour {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 20%;
+  }
+  
+  .hourly-weather .hourly-temp .hour .time,
+  .hourly-weather .hourly-temp .hour .temp {
+    width: 100%;
+    border-right: 0.5px solid #ffffff17;
+    padding: 5px 0;
+  }
+  .hourly-weather .hourly-temp .hour .temp {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    transition: 0.5s ease;
+  }
+  .hourly-weather .hourly-temp .hour .time {
+    font-family: math;
+  }
+  .meridian {
+    font-size: 8px;
+  }
+  
+  .hourly-weather .weather-cont {
+    font-family: 'Oswald', sans-serif;
+    position: absolute;
+    top: 10%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    flex-direction: column;
+    z-index: -9;
+    color: #cacaca;
+    transition: 0.5s ease;
+  }
+  
+  .hourly-weather .weather-cont .min-max {
+    font-size: 10px;
+  }
+  
+  .sun-up-down {
+    font-family: 'Oswald', sans-serif;
+    position: absolute;
+    bottom: 10%;
+    font-size: 10px;
+    display: flex;
+    width: 50%;
+    justify-content: space-evenly;
+  }
+
+  .sun-up-down .sun-up,
+  .sun-up-down .sun-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hourly-weather .sun-up-down .sun-up img,
+  .hourly-weather .sun-up-down .sun-down img {
+    max-width: 20px;
+    max-height: 20px;
+  }

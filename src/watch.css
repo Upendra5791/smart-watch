@@ -1,3 +1,10 @@
+body {
+  background-color: rgb(56, 55, 55);
+  margin: 0;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
 .page-container {
   flex-direction: column;
   display: flex;
@@ -7,38 +14,8 @@
   text-align: center;
 }
 
-.page-container .container {
-  display: grid;
-  place-content: center;
-  width: 100%;
-  height: 70%;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.page-container .container .scroll-wrapper {
-  position: absolute;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  overflow: hidden;
-  transition: 0.4s ease-in;
-}
-
-.page-container .container .scroll-wrapper .clock-wrapper {
-  width: 100vw;
-}
-
-.page-container .button-container {
-  height: 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.clock-container {
-  position: relative;
+.container.watch-outline {
+  cursor: pointer;
   margin: 0 auto;
   height: 200px;
   width: 200px;
@@ -49,10 +26,11 @@
   box-shadow: inset 0px 0px 15px 0px #373434;
   background: #000000;
   transform: scale(1.5);
+  z-index: 9999999;
 }
 
-.clock-container::before {
-  content: '';
+.container.watch-outline:before {
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -63,7 +41,141 @@
   z-index: -99;
 }
 
-.clock-container .center {
+.inner-container {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  background: transparent;
+  overflow: hidden;
+  position: relative;
+  z-index: 9999999;
+}
+
+.dial {
+  position: absolute;
+  height: 25px;
+  width: 6px;
+  border-radius: 8px;
+  background-color: #191919;
+  box-shadow: inset -3px 0px 2px 0px rgb(137 135 135);
+  z-index: 9999999;
+}
+
+.dial::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: -1px;
+  right: 6px;
+  background-color: #161616;
+  border-radius: 10px;
+}
+
+.dial.one {
+  right: 4px;
+  top: 24%;
+  transform: translateY(-50%) rotate(-29deg);
+}
+
+.dial.two {
+  right: 6px;
+  bottom: 10%;
+  transform: translateY(-50%) rotate(31deg);
+}
+
+.container .x-scroll,
+.container .y-scroll {
+  position: absolute;
+  display: flex;
+  transition: 0.5s ease;
+  height: 100%;
+  width: 100%;
+}
+
+.container .y-scroll {
+  z-index: 999;
+}
+
+.container .y-scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: 100%;
+  position: absolute;
+}
+
+.container .screen {
+  height: 200px;
+  width: 200px;
+  color: #ccc;
+  font-size: 25px;
+  transition: 0.5s ease;
+}
+
+.screen-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.container .x-dot,
+.container .y-dot {
+  position: absolute;
+  display: flex;
+  justify-content: space-evenly;
+  z-index: 9999999999;
+  opacity: 0.1;
+  transition: 0.5s ease;
+  /* transition-delay: 1s; */
+}
+
+.container .x-dot {
+  position: absolute;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+
+.container .y-dot {
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.container .x-dot .dot,
+.container .y-dot .dot {
+  height: 2px;
+  width: 2px;
+  display: block;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin: 1px;
+}
+
+.dot.filled {
+  background-color: #ccc;
+}
+
+/* CLOCK */
+
+.clock-container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.clock-container.analog .center {
   height: 5px;
   width: 5px;
   border-radius: 50%;
@@ -71,42 +183,42 @@
   border: 1px solid rgb(212, 134, 134);
   z-index: 999;
 }
-
-.clock-container .number {
+.clock-container.analog .number {
   position: absolute;
   font-size: 40px;
   color: #d5d5d5;
-  font-family: 'Alfa Slab One', cursive;
+  font-family: "Alfa Slab One", cursive;
   transition: 0.5s ease;
+  text-shadow: 0px 0px 3px black;
 }
 
-.clock-container .number.twelve {
+.clock-container.analog .number.twelve {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
 }
-.clock-container .number.one {
+.clock-container.analog .number.one {
   font-size: 20px;
   top: 16.67%;
   left: 83.33%;
   transform: translate(-66.67%, -16.67%);
 }
-.clock-container .number.three {
+.clock-container.analog .number.three {
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
 }
-.clock-container .number.six {
+.clock-container.analog .number.six {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }
-.clock-container .number.nine {
+.clock-container.analog .number.nine {
   left: 5px;
   top: 50%;
   transform: translateY(-50%);
 }
-.clock-container .hand {
+.clock-container.analog .hand {
   border-left: 2px solid rgb(212, 134, 134);
   width: 0;
   position: absolute;
@@ -115,21 +227,21 @@
   box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0.5px 0 2px 0 #2f2a2a;
 }
 
-.clock-container .seconds-hand {
+.clock-container.analog .seconds-hand {
   height: 95px;
   border-left: 1px solid rgb(255, 0, 0);
   z-index: 99;
   left: 99.5px;
 }
 
-.clock-container .minute-hand {
+.clock-container.analog .minute-hand {
   height: 80px;
   z-index: 9;
   border-width: 2px;
   left: 99px;
 }
 
-.clock-container .hour-hand {
+.clock-container.analog .hour-hand {
   height: 50px;
   z-index: 0;
   border-width: 3px;
@@ -147,10 +259,11 @@
   justify-content: space-between;
   font-size: 12px;
   z-index: -9;
+  color: #000;
 }
 
 .clock-container .day-cont div {
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   display: grid;
   place-items: center;
   background: #cacaca;
@@ -158,8 +271,8 @@
   box-shadow: inset 0 0.4px 1px 0.5px #292929;
 }
 
-.clock-wrapper .clock-container .weather-cont {
-  font-family: 'Oswald', sans-serif;
+.clock-container .weather-cont {
+  font-family: "Oswald", sans-serif;
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -169,16 +282,78 @@
   color: #cacaca;
 }
 
-.clock-wrapper.analog .clock-container .weather-cont {
+.weather-cont .temp {
+  display: flex;
+  justify-content: center;
+}
+
+.clock-container.analog .weather-cont {
   top: 30%;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.clock-wrapper.digital .clock-container .weather-cont {
+.clock-container.digital .weather-cont {
   top: 25%;
   left: 70%;
   transform: translateX(-50%);
+}
+
+.clock-container.digital {
+  position: relative;
+}
+
+.clock-container.digital .number {
+  font-family: "Anton", sans-serif;
+  position: absolute;
+  font-size: 90px;
+  text-shadow: 0px 0px 3px black;
+  height: 100px;
+  width: 100px;
+  transition: 0.5s ease;
+}
+
+.clock-container.digital .number.hour {
+  left: 10%;
+  top: 0;
+}
+
+.clock-container.digital .number.minute {
+  left: 35%;
+  top: 33%;
+}
+
+.clock-container.digital .day-cont {
+  height: 20px;
+  width: 40px;
+  bottom: 27%;
+  left: 27%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 15px;
+  z-index: -9;
+  padding: 5px;
+}
+
+.clock-container.digital .day-cont div {
+  font-family: "Oswald", sans-serif;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  width: 47%;
+  color: #cacaca;
+  box-shadow: none;
+}
+
+.clock-container.digital .day-cont div.day {
+  margin-left: 12px;
+}
+
+.button-container {
+  display: flex;
+    justify-content: space-evenly;
 }
 
 .button-container .change-theme {
@@ -201,95 +376,82 @@
   display: flex;
   justify-content: center;
 }
-.btn-cont .toggle-container {
-  height: 30px;
-  width: 50px;
-  background-color: rgb(226, 225, 217);
-  border-radius: 50px;
+
+.x-scroll-wrapper {
   display: flex;
-  align-items: center;
-  padding: 3px;
-  position: relative;
-  box-shadow: inset 0px 0px 2px 0.4px #161616;
 }
 
-.btn-cont input {
-  display: none;
+.weather-icon img {
+  max-height: 15px;
+  max-width: 15px;
 }
 
-.btn-cont .toggle-container .tgbt {
-  height: 28px;
-  width: 28px;
-  border-radius: 50%;
+.overlay-screen {
   position: absolute;
-  transition: 0.4s ease;
-  left: 3px;
-  cursor: pointer;
-  box-shadow: 0px 0px 1px 0.4px #161616;
-}
-
-.btn-cont input:checked + .toggle-container .tgbt {
-  left: calc(100% - 32px);
-}
-
-.clock-wrapper.digital .clock-container {
-  position: relative;
-}
-
-.clock-wrapper.digital .clock-container .number {
-  /* font-family: 'Alfa Slab One', cursive; */
-  font-family: 'Anton', sans-serif;
-  position: absolute;
-  font-size: 90px;
-  text-shadow: 0px 0px 3px black;
-  height: 100px;
-  width: 100px;
-}
-
-.clock-wrapper.digital .clock-container .number.hour {
-  left: 10%;
   top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(25px);
+  z-index: 9999999;
 }
 
-.clock-wrapper.digital .clock-container .number.minute {
-  left: 35%;
-  top: 33%;
-}
-
-.clock-wrapper.digital .clock-container .day-cont {
-  height: 20px;
-  width: 40px;
-  bottom: 27%;
-  left: 27%;
+.overlay-screen .close-icon {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 15px;
-  z-index: -9;
-  padding: 5px;
-}
-
-.clock-wrapper.digital .clock-container .day-cont div {
-  font-family: 'Oswald', sans-serif;
-  display: grid;
-  place-items: center;
-  background: transparent;
-  width: 47%;
+  right: 10px;
+  top: 10px;
   color: #cacaca;
-  box-shadow: none;
-}
-
-.clock-wrapper.digital .clock-container .day-cont div.day {
-  margin-left: 12px;
-}
-
-.btn-cont .dot {
-  height: 10px;
-  width: 10px;
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 50%;
-  margin: 0 5px;
-  transition: 0.4s ease-in;
+  font-size: 25px;
   cursor: pointer;
+}
+
+/* ------------------- Astro Mode CSS ------------------------- */
+
+.moon-center {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 0%) rotate(0deg);
+  height: 85%;
+  width: 100%;
+  z-index: -999;
+  transform-origin: bottom;
+  transition: 1s cubic-bezier(0.44, 0.45, 0.63, 0.68);
+  opacity: 0;
+}
+
+.astro_1 .moon-center,
+.astro_2 .moon-center {
+  opacity: 1;
+}
+
+.astro_1 .moon-center .moon,
+.astro_2 .moon-center .moon {
+  background-image: url(../public/images/moon_1.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 75%;
+  width: 75%;
+  transition: 1s cubic-bezier(0.44, 0.45, 0.63, 0.68);
+}
+
+.astro_1 .x-scroll-wrapper {
+  background-image: url(../public/images/space_8.jpg);
+  z-index: -99999;
+  background-size: contain;
+}
+
+.astro_2 .x-scroll-wrapper {
+  background-image: url(../public/images/space_2.jpg);
+  z-index: -99999;
+  background-size: contain;
+}
+
+.astro_1 .calendar,
+.astro_2 .calendar {
+  background-image: url(../public/images/earth_2.jpg);
+  background-position-y: 250%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: 1s ease-out;
 }

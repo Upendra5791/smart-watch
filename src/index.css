@@ -15,4 +15,6 @@ code {
 body {
   background-color: rgb(56, 55, 55);
   margin: 0;
+  overscroll-behavior: none;
+  overflow: hidden;
 }

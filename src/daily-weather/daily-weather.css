@@ -1,0 +1,62 @@
+.daily-weather .daily-temp {
+  height: 80px;
+  width: 85%;
+  background-color: #ffffff2e;
+  border-radius: 20px;
+  font-size: 10px;
+  position: relative;
+}
+
+.daily-weather .daily-temp .x-scroll {
+  position: absolute;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.daily-temp .x-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.daily-weather .daily-temp .day {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 20%;
+  font-size: 8px;
+}
+
+.daily-weather .daily-temp .day .time,
+.daily-weather .daily-temp .day .temp {
+  width: 100%;
+  border-right: 0.5px solid #ffffff17;
+  padding: 5px 0;
+}
+.daily-weather .daily-temp .day .temp {
+  font-family: "Oswald", sans-serif;
+  font-size: 10px;
+  transition: 0.5s ease;
+}
+.daily-weather .daily-temp .day .time {
+  font-family: math;
+}
+.daily-weather .daily-temp .day .time .meridian {
+  font-size: 8px;
+}
+
+.daily-weather .weather-cont {
+  font-family: "Oswald", sans-serif;
+  position: absolute;
+  top: 10%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  flex-direction: column;
+  z-index: -9;
+  color: #cacaca;
+  transition: 0.5s ease;
+}
+
+.daily-weather .weather-cont .min-max {
+  font-size: 10px;
+}
