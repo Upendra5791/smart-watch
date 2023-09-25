@@ -45,6 +45,13 @@ export interface Now {
   sec: number;
 }
 
+export interface Touch {
+  x: number;
+  y: number;
+  timeStamp: number;
+  mouseState: "UP" | "DOWN";
+}
+
 export enum days {
   "SUN",
   "MON",
