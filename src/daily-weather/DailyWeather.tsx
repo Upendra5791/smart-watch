@@ -1,30 +1,33 @@
-import * as React from 'react';
 import './daily-weather.css';
-import { Weather, days } from '../watch-utility';
+import { days } from '../watch-utility';
+import { WeatherContext } from '../WatchContainer';
+import { useContext } from 'react';
 
 interface IDailyWeatherProps {
-    weatherDetails: Weather;
     weatherIcon: JSX.Element
 }
 
-export function DailyWeather({ weatherDetails, weatherIcon }: IDailyWeatherProps) {
+export function DailyWeather({weatherIcon}: IDailyWeatherProps) {
+  
+  const weather = useContext(WeatherContext);
+
   const getWeather = () => {
-    return weatherDetails?.available ? (
+    return weather?.available ? (
       <div className="weather-cont">
         <div className="temp">
-          {Math.round(weatherDetails?.currentWeather.temperature || 0)}&#176;C
+          {Math.round(weather?.currentWeather.temperature || 0)}&#176;C
           {weatherIcon}
         </div>
         <div className="min-max">
-          H: {Math.round(weatherDetails?.currentWeather.max)}&#176;C &nbsp; L:{' '}
-          {Math.round(weatherDetails?.currentWeather.min)}&#176;C
+          H: {Math.round(weather?.currentWeather.max)}&#176;C &nbsp; L:{' '}
+          {Math.round(weather?.currentWeather.min)}&#176;C
         </div>
       </div>
     ) : null;
   };
 
   const getDays = () => {
-    return weatherDetails?.daily?.map((day: any) => {
+    return weather?.daily?.map((day: any) => {
       return (
         <div key={day.day.getDate()} className="day">
           <div className="day">{days[day.day.getDay()]}</div>
@@ -38,12 +41,12 @@ export function DailyWeather({ weatherDetails, weatherIcon }: IDailyWeatherProps
     });
   };
 
-  return (
+  return weather ? (
     <div className="screen-container daily-weather">
       {getWeather()}
       <div className="daily-temp">
         <div className="x-scroll">{getDays()}</div>
       </div>
     </div>
-  );
+  ) : null;
 }

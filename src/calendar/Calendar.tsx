@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { months, theme, weekDays } from '../watch-utility';
 import './calendar.css';
 
@@ -8,7 +7,6 @@ interface ICalendarProps {
 }
 
 export function Calendar({ themeIdx, left }: ICalendarProps) {
-  const [backgroundY, setbackgroundY] = React.useState(0);
 
   const getHeaderCells = () => {
     return weekDays.map((m, i) => (
@@ -69,9 +67,7 @@ export function Calendar({ themeIdx, left }: ICalendarProps) {
     );
   };
 
-  React.useEffect(() => {
-    setbackgroundY(Math.abs(left) > 190 ? 150 : 250);
-  }, [left])
+  const backgroundY = Math.abs(left) > 190 ? 150 : 250
 
   return (
     <div className="screen-container calendar"
